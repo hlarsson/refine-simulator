@@ -39,8 +39,9 @@ class RefineSimulator
 	end
 
 	def run(startLvl=0, targetLvl, nrOfRuns, strategy)
-		# nrOfRuns.times { results.update(run(startLvl, targetLvl, strategy, SingleRunResult.new(startLvl))) }
-		runOnce(startLvl, targetLvl, strategy, SingleRunResult.new(startLvl))
+		results = SimulationResults.new
+		nrOfRuns.times { puts "-------------"; results = results.update(runOnce(startLvl, targetLvl, strategy, SingleRunResult.new(startLvl))) }
+		results
 	end
 
 	def runOnce(currentLvl, targetLvl, strategy, result)
@@ -89,6 +90,31 @@ class RefineSimulator
 	end
 end
 
+class SimulationResults
+	def initialize(nrOfRuns=0, worst=SingleRunResult.new(0, 0, 0, 0), best=SingleRunResult.new(0, 100000000, 100000000, 100000000), total=SingleRunResult.new(0, 0, 0, 0))
+		@nrOfRuns = nrOfRuns
+		@worst = worst
+		@best = best
+		@total = total
+	end
+
+	def update(singleRunResult)
+		SimulationResults.new(
+			@nrOfRuns + 1,
+			SingleRunResult::worst(@worst, singleRunResult),
+			SingleRunResult::best(@best, singleRunResult),
+			@total.add(singleRunResult))
+	end
+
+	def avg
+		SingleRunResult.new(@best.lvl, @total.mirages.to_f / @nrOfRuns, @total.tienkangs.to_f / @nrOfRuns, @total.tishas.to_f / @nrOfRuns)
+	end
+
+	def to_s
+		"Best run: " + @best.to_s + "\nWorst run: " + @worst.to_s + "\nAvg run: " + avg.to_s
+	end
+end
+
 class SingleRunResult
 	def initialize(startLvl, mirages = 0, tienkangs = 0, tishas = 0)
 		@lvl = startLvl
@@ -97,11 +123,39 @@ class SingleRunResult
 		@tishas = tishas
 	end
 
+	def lvl
+		@lvl
+	end
+
+	def mirages
+		@mirages
+	end
+
+	def tienkangs
+		@tienkangs
+	end
+
+	def tishas
+		@tishas
+	end
+
 	def update(newLvl, aid)
 		mirages = @mirages + 1
 		tienkangs = @tienkangs + (aid == :tienkangs ? 1 : 0)
 		tishas = @tishas + (aid == :tishas ? 1 : 0)
 		SingleRunResult.new(newLvl, mirages, tienkangs, tishas)
+	end
+
+	def self.worst(run1, run2)
+		run1.mirages > run2.mirages ? run1 : run2
+	end
+
+	def self.best(run1, run2)
+		run1.mirages < run2.mirages ? run1 : run2
+	end
+
+	def add(singleRunResult)
+		SingleRunResult.new(singleRunResult.lvl, @mirages + singleRunResult.mirages, @tienkangs + singleRunResult.tienkangs, @tishas + singleRunResult.tishas)
 	end
 
 	def to_s
@@ -119,5 +173,5 @@ sim = RefineSimulator.new
 
 strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
 #10.times { puts sim.refine(7, strategy) }
-puts sim.run(6, 7, 1, strategy)
+puts sim.run(5, 6, 100, strategy)
 #sim.run(5)
