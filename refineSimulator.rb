@@ -46,13 +46,13 @@ class RefineSimulator
 		return results, (endTime - startTime)
 	end
 
-	def runOnce(currentLvl, targetLvl, strategy, result)
-		if (currentLvl == targetLvl)
-			result
-		else
-			newLvl, aid = refine(currentLvl, strategy)
-			runOnce(newLvl, targetLvl, strategy, result.update(newLvl, aid))
+	def runOnce(startLvl, targetLvl, strategy, result)
+		result = SingleRunResult.new(startLvl)
+		while (result.lvl != targetLvl)
+			newLvl, aid = refine(result.lvl, strategy)
+			result = result.update(newLvl, aid)
 		end
+		result
 	end
 
 	def refine(lvl, strategy)
@@ -175,7 +175,7 @@ sim = RefineSimulator.new
 
 strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
 #10.times { puts sim.refine(7, strategy) }
-results, time = sim.run(5, 6, 10, strategy)
+results, time = sim.run(0, 6, 1000, strategy)
 puts results
 puts "Simulation running time: #{time} seconds."
 #sim.run(5)
