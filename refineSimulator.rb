@@ -1,21 +1,3 @@
-class RefiningStrategy
-	def initialize(miragesRange, tienkangsRange, tishasRange)
-		@strategy = { :mirages => miragesRange, :tienkangs => tienkangsRange, :tishas => tishasRange}
-	end
-
-	def getAidForLvl(lvl)
-		@strategy.each_pair do |aid, lvlRange|
-			if (lvlRange.include? lvl) 
-				return aid
-			end
-		end
-	end
-
-	def to_s
-		"mirages: #{@strategy[:mirages].to_s}, tienkangs: #{@strategy[:tienkangs].to_s}, tishas: #{@strategy[:tishas].to_s}"
-	end
-end
-
 class RefineSimulator
 	@@refineRates = [
 		{ :mirages => 0.5, :tienkangs => 0.65, :tishas => 0.535}, #+1
@@ -92,6 +74,24 @@ class RefineSimulator
 	end
 end
 
+class RefiningStrategy
+	def initialize(miragesRange, tienkangsRange, tishasRange)
+		@strategy = { :mirages => miragesRange, :tienkangs => tienkangsRange, :tishas => tishasRange}
+	end
+
+	def getAidForLvl(lvl)
+		@strategy.each_pair do |aid, lvlRange|
+			if (lvlRange.include? lvl) 
+				return aid
+			end
+		end
+	end
+
+	def to_s
+		"mirages: #{@strategy[:mirages].to_s}, tienkangs: #{@strategy[:tienkangs].to_s}, tishas: #{@strategy[:tishas].to_s}"
+	end
+end
+
 class SimulationResults
 	def initialize(nrOfRuns=0, worst=SingleRunResult.new(0, 0, 0, 0), best=SingleRunResult.new(0, 100000000, 100000000, 100000000), total=SingleRunResult.new(0, 0, 0, 0))
 		@nrOfRuns = nrOfRuns
@@ -118,27 +118,12 @@ class SimulationResults
 end
 
 class SingleRunResult
+	attr_accessor :lvl, :mirages, :tienkangs, :tishas
 	def initialize(startLvl, mirages = 0, tienkangs = 0, tishas = 0)
 		@lvl = startLvl
 		@mirages = mirages
 		@tienkangs = tienkangs
 		@tishas = tishas
-	end
-
-	def lvl
-		@lvl
-	end
-
-	def mirages
-		@mirages
-	end
-
-	def tienkangs
-		@tienkangs
-	end
-
-	def tishas
-		@tishas
 	end
 
 	def update(newLvl, aid)
@@ -175,7 +160,7 @@ sim = RefineSimulator.new
 
 strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
 #10.times { puts sim.refine(7, strategy) }
-results, time = sim.run(0, 6, 1000, strategy)
+results, time = sim.run(0, 3, 10, strategy)
 puts results
 puts "Simulation running time: #{time} seconds."
 #sim.run(5)
