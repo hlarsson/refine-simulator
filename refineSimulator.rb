@@ -12,7 +12,7 @@ class RefiningStrategy
 	end
 
 	def to_s
-		"mirages: " + @strategy[:mirages].to_s + ", tienkangs: " + @strategy[:tienkangs].to_s + ", tishas: " + @strategy[:tishas].to_s
+		"mirages: #{@strategy[:mirages].to_s}, tienkangs: #{@strategy[:tienkangs].to_s}, tishas: #{@strategy[:tishas].to_s}"
 	end
 end
 
@@ -39,9 +39,11 @@ class RefineSimulator
 	end
 
 	def run(startLvl=0, targetLvl, nrOfRuns, strategy)
+		startTime = Time.now
 		results = SimulationResults.new
 		nrOfRuns.times { puts "-------------"; results = results.update(runOnce(startLvl, targetLvl, strategy, SingleRunResult.new(startLvl))) }
-		results
+		endTime = Time.now
+		return results, (endTime - startTime)
 	end
 
 	def runOnce(currentLvl, targetLvl, strategy, result)
@@ -64,20 +66,20 @@ class RefineSimulator
 	end
 
 	def refineSucceeded(lvl, aid)
-		puts "Success! +" + lvl.to_s + " -> " + "+" + (lvl + 1).to_s
+		puts "Success! +#{lvl.to_s} -> +#{(lvl + 1).to_s}"
 		return lvl + 1, aid
 	end
 
 	def refineFailed(lvl, aid)
 		case aid
 		when :mirages
-			puts "Fail! +" + lvl.to_s + " -> " + "+0"
+			puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tienkangs
-			puts "Fail! +" + lvl.to_s + " -> " + "+0"
+			puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tishas
-			puts "Fail! +" + lvl.to_s + " -> " + "+" + (lvl - 1).to_s
+			puts "Fail! +#{lvl.to_s} -> +#{(lvl - 1).to_s}"
 			return lvl - 1, aid
 		end
 	end
@@ -111,7 +113,7 @@ class SimulationResults
 	end
 
 	def to_s
-		"Best run: " + @best.to_s + "\nWorst run: " + @worst.to_s + "\nAvg run: " + avg.to_s
+		"Best run: #{@best.to_s}\nWorst run: #{@worst.to_s}\nAvg run: #{avg.to_s}"
 	end
 end
 
@@ -159,7 +161,7 @@ class SingleRunResult
 	end
 
 	def to_s
-		"lvl: " + @lvl.to_s + ", mirages: " + @mirages.to_s + ", tienkangs: " + @tienkangs.to_s + ", tishas: " + @tishas.to_s
+		"lvl: #{@lvl.to_s}, mirages: #{@mirages.to_s}, tienkangs: #{@tienkangs.to_s}, tishas: #{@tishas.to_s}"
 	end
 end
 
@@ -173,5 +175,7 @@ sim = RefineSimulator.new
 
 strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
 #10.times { puts sim.refine(7, strategy) }
-puts sim.run(5, 6, 100, strategy)
+results, time = sim.run(5, 6, 10, strategy)
+puts results
+puts "Simulation running time: #{time} seconds."
 #sim.run(5)
