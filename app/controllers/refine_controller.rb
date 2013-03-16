@@ -8,11 +8,11 @@ class RefineController < ApplicationController
 	sim = Simulator.new
 
 	strategy = RefiningStrategy.new(
-		param[:miragesLow]..param[:miragesHigh], 
-		param[:tienkangsLow]..param[:tienkangsHigh], 
-		param[:tishasLow]..param[:tishasHigh])
+		params[:miragesLow].to_i..params[:miragesHigh].to_i,
+		params[:tienkangsLow].to_i..params[:tienkangsHigh].to_i,
+		params[:tishasLow].to_i..params[:tishasHigh].to_i)
 	@config = RunConfiguration.new(
-		param[:startLevel], param[:targetLevel], param[:nrOfRuns], strategy)
+		params[:startLevel].to_i, params[:targetLevel].to_i, params[:nrOfRuns].to_i, strategy)
 	@results, @time = sim.run(@config)
   end
 end

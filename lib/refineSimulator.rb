@@ -79,7 +79,9 @@ class RunConfiguration
 	end
 
 	def to_s
-		"start lvl: #{@startLvl}, end lvl: #{@endLvl}, nr of runs: #{@nrOfRuns}, strategy: #{strategy}"
+		"start lvl: #{@startLvl}, target lvl: #{@targetLvl}," +
+		"nr of runs: #{@nrOfRuns}, strategy: #{strategy}"
+	end
 end
 
 class RefiningStrategy
