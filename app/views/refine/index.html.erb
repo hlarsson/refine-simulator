@@ -59,26 +59,29 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
   </p>
 
   <p>
-    <%= label_tag(:startLevel, 'Start level') %>
+    <%= label_tag(:startLevel, 'Start level') %><br>
     <%= text_field_tag(:startLevel, 0, :size => 2) %>
+  </p>
+
+  <p>
     <%= label_tag(:targetLevel, 'Target level') %><br>
     <%= text_field_tag(:targetLevel, 5, :size => 2) %>
   </p>
  
   <p>
-    <%= label_tag(:miragesLow, 'Mirages from/to level') %><br>
+    <%= label_tag(:miragesLow, 'Mirages on levels') %><br>
     <%= text_field_tag(:miragesLow, 0, :size => 2) %>
     <%= text_field_tag(:miragesHigh, 2, :size => 2) %>
   </p>
  
   <p>
-    <%= label_tag(:tienkangsLow, 'Tienkangs from/to level') %><br>
+    <%= label_tag(:tienkangsLow, 'Tienkangs on levels') %><br>
     <%= text_field_tag(:tienkangsLow, 3, :size => 2) %>
     <%= text_field_tag(:tienkangsHigh, 4, :size => 2) %>
   </p>
 
   <p>
-    <%= label_tag(:tishas, 'Tishas from/to level') %><br>
+    <%= label_tag(:tishas, 'Tishas on levels') %><br>
     <%= text_field_tag(:tishasLow, 5, :size => 2) %>
     <%= text_field_tag(:tishasHigh, 11, :size => 2) %>
   </p>

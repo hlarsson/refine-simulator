@@ -6,24 +6,27 @@
   </p>
 
   <p>
-    <%= label_tag(:startLevel, 'Start level') %>
+    <%= label_tag(:startLevel, 'Start level') %><br>
     <%= @config.startLvl %>
+  </p>
+
+  <p>
     <%= label_tag(:targetLevel, 'Target level') %><br>
     <%= @config.targetLvl %>
   </p>
  
   <p>
-    <%= label_tag(:miragesLow, 'Mirages from/to level') %><br>
+    <%= label_tag(:miragesLow, 'Mirages on levels') %><br>
     <%= @config.strategy.ranges[:mirages].to_s %>
   </p>
  
   <p>
-    <%= label_tag(:tienkangsLow, 'Tienkangs from/to level') %><br>
+    <%= label_tag(:tienkangsLow, 'Tienkangs on levels') %><br>
     <%= @config.strategy.ranges[:tienkangs].to_s %>
   </p>
 
   <p>
-    <%= label_tag(:tishas, 'Tishas from/to level') %><br>
+    <%= label_tag(:tishas, 'Tishas on levels') %><br>
     <%= @config.strategy.ranges[:tishas].to_s %>
   </p>
 </div>
@@ -86,7 +89,7 @@
 </div>
 
 <div id="runningTime">
-	<%= label_tag(:runningTime, 'Simulation running time') %>
+	<%= label_tag(:runningTime, 'Running time') %>
 	<%= "#{@time} seconds" %>
 </div>
 
