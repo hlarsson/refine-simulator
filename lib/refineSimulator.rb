@@ -1,4 +1,4 @@
-class RefineSimulator
+class Simulator
 	@@refineRates = [
 		{ :mirages => 0.5, :tienkangs => 0.65, :tishas => 0.535}, #+1
 		{ :mirages => 0.3, :tienkangs => 0.45, :tishas => 0.335}, #+2
@@ -20,10 +20,12 @@ class RefineSimulator
 		@@refineRates
 	end
 
-	def run(startLvl=0, targetLvl, nrOfRuns, strategy)
+	def run(config)
 		startTime = Time.now
 		results = SimulationResults.new
-		nrOfRuns.times { puts "-------------"; results = results.update(runOnce(startLvl, targetLvl, strategy, SingleRunResult.new(startLvl))) }
+		config.nrOfRuns.times { 
+			results = results.update(runOnce(
+				config.startLvl, config.targetLvl, config.strategy, SingleRunResult.new(config.startLvl))) }
 		endTime = Time.now
 		return results, (endTime - startTime)
 	end
@@ -39,8 +41,8 @@ class RefineSimulator
 
 	def refine(lvl, strategy)
 		aid = strategy.getAidForLvl(lvl)
-		puts "aid used: " + aid.to_s
-		if (rand < RefineSimulator.refineRates[lvl][aid])
+		# puts "aid used: " + aid.to_s
+		if (rand < @@refineRates[lvl][aid])
 			refineSucceeded(lvl, aid)
 		else
 			refineFailed(lvl, aid)
@@ -48,30 +50,43 @@ class RefineSimulator
 	end
 
 	def refineSucceeded(lvl, aid)
-		puts "Success! +#{lvl.to_s} -> +#{(lvl + 1).to_s}"
+		# puts "Success! +#{lvl.to_s} -> +#{(lvl + 1).to_s}"
 		return lvl + 1, aid
 	end
 
 	def refineFailed(lvl, aid)
 		case aid
 		when :mirages
-			puts "Fail! +#{lvl.to_s} -> +0"
+			# puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tienkangs
-			puts "Fail! +#{lvl.to_s} -> +0"
+			# puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tishas
-			puts "Fail! +#{lvl.to_s} -> +#{(lvl - 1).to_s}"
+			# puts "Fail! +#{lvl.to_s} -> +#{(lvl - 1).to_s}"
 			return lvl - 1, aid
 		end
 	end
 
 	def testStuff
-		puts RefineSimulator.refineRates[8][:tienkangs]
+		puts Simulator.refineRates[8][:tienkangs]
 		puts "+8 failed mir: " + refineFailed(8, :mirages).to_s
 		puts "+8 failed tien: " + refineFailed(8, :tienkangs).to_s
 		puts "+8 failed tishas: " + refineFailed(8, :tishas).to_s
 	end
+end
+
+class RunConfiguration
+	attr_accessor :startLvl, :targetLvl, :nrOfRuns, :strategy
+	def initialize(startLvl, targetLvl, nrOfRuns, strategy)
+		@startLvl = startLvl
+		@targetLvl = targetLvl
+		@nrOfRuns = nrOfRuns
+		@strategy = strategy
+	end
+
+	def to_s
+		"start lvl: #{@startLvl}, end lvl: #{@endLvl}, nr of runs: #{@nrOfRuns}, strategy: #{strategy}"
 end
 
 class RefiningStrategy
@@ -150,17 +165,17 @@ class SingleRunResult
 	end
 end
 
-result = SingleRunResult.new(5)
-#puts result
-#puts result.update(6, :tienkangs)
+# result = SingleRunResult.new(5)
+# #puts result
+# #puts result.update(6, :tienkangs)
 
-sim = RefineSimulator.new
-#sim.testStuff
+# sim = Simulator.new
+# #sim.testStuff
 
 
-strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
-#10.times { puts sim.refine(7, strategy) }
-results, time = sim.run(0, 3, 10, strategy)
-puts results
-puts "Simulation running time: #{time} seconds."
-#sim.run(5)
+# strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
+# #10.times { puts sim.refine(7, strategy) }
+# results, time = sim.run(0, 3, 10, strategy)
+# puts results
+# puts "Simulation running time: #{time} seconds."
+# #sim.run(5)

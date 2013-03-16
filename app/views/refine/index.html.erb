@@ -1,0 +1,37 @@
+<h1>Refining Simulator</h1>
+
+<%= form_tag '/refine/run' do |f| %>
+  <p>
+    <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
+    <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
+  </p>
+
+  <p>
+    <%= label_tag(:startLevel, 'Start level') %>
+    <%= text_field_tag(:startLevel, 0, :size => 2) %>
+    <%= label_tag(:targetLevel, 'Target level') %><br>
+    <%= text_field_tag(:targetLevel, 5, :size => 2) %>
+  </p>
+ 
+  <p>
+    <%= label_tag(:miragesLow, 'Mirages from/to level') %><br>
+    <%= text_field_tag(:miragesLow, 0, :size => 2) %>
+    <%= text_field_tag(:miragesHigh, 2, :size => 2) %>
+  </p>
+ 
+  <p>
+    <%= label_tag(:tienkangsLow, 'Tienkangs from/to level') %><br>
+    <%= text_field_tag(:tienkangsLow, 3, :size => 2) %>
+    <%= text_field_tag(:tienkangsHigh, 4, :size => 2) %>
+  </p>
+
+  <p>
+    <%= label_tag(:tishas, 'Tishas from/to level') %><br>
+    <%= text_field_tag(:tishasLow, 5, :size => 2) %>
+    <%= text_field_tag(:tishasHigh, 11, :size => 2) %>
+  </p>
+
+  <p>
+    <%= submit_tag "Run Simulation" %>
+  </p>
+<% end %>
