@@ -1,0 +1,91 @@
+<div id="config">
+  <p>
+    <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
+    <%= @config.nrOfRuns %>
+  </p>
+
+  <p>
+    <%= label_tag(:startLevel, 'Start level') %>
+    <%= @config.startLvl %>
+    <%= label_tag(:targetLevel, 'Target level') %><br>
+    <%= @config.targetLvl %>
+  </p>
+ 
+  <p>
+    <%= label_tag(:miragesLow, 'Mirages from/to level') %><br>
+    <%= @config.strategy.ranges[:mirages].to_s %>
+  </p>
+ 
+  <p>
+    <%= label_tag(:tienkangsLow, 'Tienkangs from/to level') %><br>
+    <%= @config.strategy.ranges[:tienkangs].to_s %>
+  </p>
+
+  <p>
+    <%= label_tag(:tishas, 'Tishas from/to level') %><br>
+    <%= @config.strategy.ranges[:tishas].to_s %>
+  </p>
+</div>
+
+<div id="result">
+	<div id="average">
+		<% avg = @results.avg %>
+		<h2>Average run</h2>
+	    <p>
+	    	<%= label_tag(:mirages, 'Mirages used') %><br>
+    		<%= avg.mirages %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+    		<%= avg.tienkangs %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tishas, 'Tishas used') %><br>
+    		<%= avg.tishas %>
+    	</p>
+	</div>
+
+	<div id="average">
+		<h2>Best run</h2>
+	    <p>
+	    	<%= label_tag(:mirages, 'Mirages used') %><br>
+    		<%= @results.best.mirages %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+    		<%= @results.best.tienkangs %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tishas, 'Tishas used') %><br>
+    		<%= @results.best.tishas %>
+    	</p>
+	</div>
+
+	<div id="average">
+		<h2>Worst run</h2>
+	    <p>
+	    	<%= label_tag(:mirages, 'Mirages used') %><br>
+    		<%= @results.worst.mirages %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+    		<%= @results.worst.tienkangs %>
+    	</p>
+
+	    <p>
+	    	<%= label_tag(:tishas, 'Tishas used') %><br>
+    		<%= @results.worst.tishas %>
+    	</p>
+	</div>
+</div>
+
+<div id="runningTime">
+	<%= label_tag(:runningTime, 'Simulation running time') %>
+	<%= "#{@time} seconds" %>
+</div>
+

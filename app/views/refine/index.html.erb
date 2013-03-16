@@ -1,6 +1,20 @@
+<script>
+  $(function() {
+    $('#refineForm').bind('ajax:success', function(event, xhr, status){
+      $('#result').html(xhr.responseText);
+    });
+    $('#refineForm').bind('ajax:complete', function(event, xhr, status){
+      $('#result').html(xhr.responseText);
+    });
+    $('#refineForm').bind('ajax:failure', function(event, xhr, status){
+      $('#errorDiv').show();
+    });
+  });
+</script>
+
 <h1>Refining Simulator</h1>
 
-<%= form_tag '/refine/run' do |f| %>
+<%= form_tag '/refine/run', :id => 'refineForm', :remote => true do %>
   <p>
     <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
     <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
@@ -34,4 +48,7 @@
   <p>
     <%= submit_tag "Run Simulation" %>
   </p>
+
 <% end %>
+
+<div id="result"></div>

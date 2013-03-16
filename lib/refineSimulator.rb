@@ -85,12 +85,13 @@ class RunConfiguration
 end
 
 class RefiningStrategy
+	attr_accessor :ranges
 	def initialize(miragesRange, tienkangsRange, tishasRange)
-		@strategy = { :mirages => miragesRange, :tienkangs => tienkangsRange, :tishas => tishasRange}
+		@ranges = { :mirages => miragesRange, :tienkangs => tienkangsRange, :tishas => tishasRange}
 	end
 
 	def getAidForLvl(lvl)
-		@strategy.each_pair do |aid, lvlRange|
+		@ranges.each_pair do |aid, lvlRange|
 			if (lvlRange.include? lvl) 
 				return aid
 			end
@@ -98,11 +99,12 @@ class RefiningStrategy
 	end
 
 	def to_s
-		"mirages: #{@strategy[:mirages].to_s}, tienkangs: #{@strategy[:tienkangs].to_s}, tishas: #{@strategy[:tishas].to_s}"
+		"mirages: #{@ranges[:mirages].to_s}, tienkangs: #{@ranges[:tienkangs].to_s}, tishas: #{@ranges[:tishas].to_s}"
 	end
 end
 
 class SimulationResults
+	attr_accessor :worst, :best
 	def initialize(nrOfRuns=0, worst=SingleRunResult.new(0, 0, 0, 0), best=SingleRunResult.new(0, 100000000, 100000000, 100000000), total=SingleRunResult.new(0, 0, 0, 0))
 		@nrOfRuns = nrOfRuns
 		@worst = worst

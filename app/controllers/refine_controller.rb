@@ -14,5 +14,6 @@ class RefineController < ApplicationController
 	@config = RunConfiguration.new(
 		params[:startLevel].to_i, params[:targetLevel].to_i, params[:nrOfRuns].to_i, strategy)
 	@results, @time = sim.run(@config)
+	puts "####simulation done"
   end
 end
