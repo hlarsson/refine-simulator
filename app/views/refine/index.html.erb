@@ -39,12 +39,10 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
         nrOfRuns : {required: true, number: true, min: 1, maxRuns: true},
         startLevel : {required: true, number: true, min: 0, max: 12},
         targetLevel : {required: true, number: true, min: 0, max: 12},
-        miragesLow : {required: true, number: true, min: 0, max: 12},
-        miragesHigh : {required: true, number: true, min: 0, max: 12},
-        tienkangsLow : {required: true, number: true, min: 0, max: 12},
-        tienkangsHigh : {required: true, number: true, min: 0, max: 12},
-        tishasLow : {required: true, number: true, min: 0, max: 12},
-        tishasHigh : {required: true, number: true, min: 0, max: 12},
+        tienkangsLow : {required: true, number: true, min: 0, max: 11},
+        tienkangsHigh : {required: true, number: true, min: 0, max: 11},
+        tishasLow : {required: true, number: true, min: 0, max: 11},
+        tishasHigh : {required: true, number: true, min: 0, max: 11},
       }
     });
   });
@@ -58,6 +56,15 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
     <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
   </p>
 
+  <ul>
+    <li>target lvl 0-7 => max nr of runs is 1000.</li>
+    <li>target lvl 8 => max nr of runs is 100.</li>
+    <li>target lvl 9 => max nr of runs is 10.</li>
+    <li>target lvl 10 => max nr of runs is 10.</li>
+    <li>target lvl 11 => max nr of runs is 1.</li>
+    <li>target lvl 12 => max nr of runs is 1.</li>
+  </ul>
+
   <p>
     <%= label_tag(:startLevel, 'Start level') %><br>
     <%= text_field_tag(:startLevel, 0, :size => 2) %>
@@ -66,12 +73,6 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
   <p>
     <%= label_tag(:targetLevel, 'Target level') %><br>
     <%= text_field_tag(:targetLevel, 5, :size => 2) %>
-  </p>
- 
-  <p>
-    <%= label_tag(:miragesLow, 'Mirages on levels') %><br>
-    <%= text_field_tag(:miragesLow, 0, :size => 2) %>
-    <%= text_field_tag(:miragesHigh, 2, :size => 2) %>
   </p>
  
   <p>

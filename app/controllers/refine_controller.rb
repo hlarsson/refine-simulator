@@ -22,7 +22,6 @@ class RefineController < ApplicationController
 	sim = Simulator.new
 
 	strategy = RefiningStrategy.new(
-		params[:miragesLow].to_i..params[:miragesHigh].to_i,
 		params[:tienkangsLow].to_i..params[:tienkangsHigh].to_i,
 		params[:tishasLow].to_i..params[:tishasHigh].to_i)
 	@config = RunConfiguration.new(

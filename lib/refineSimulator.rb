@@ -41,7 +41,6 @@ class Simulator
 
 	def refine(lvl, strategy)
 		aid = strategy.getAidForLvl(lvl)
-		# puts "aid used: " + aid.to_s
 		if (rand < @@refineRates[lvl][aid])
 			refineSucceeded(lvl, aid)
 		else
@@ -50,20 +49,16 @@ class Simulator
 	end
 
 	def refineSucceeded(lvl, aid)
-		# puts "Success! +#{lvl.to_s} -> +#{(lvl + 1).to_s}"
 		return lvl + 1, aid
 	end
 
 	def refineFailed(lvl, aid)
 		case aid
 		when :mirages
-			# puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tienkangs
-			# puts "Fail! +#{lvl.to_s} -> +0"
 			return 0, aid
 		when :tishas
-			# puts "Fail! +#{lvl.to_s} -> +#{(lvl - 1).to_s}"
 			return lvl - 1, aid
 		end
 	end
@@ -86,8 +81,8 @@ end
 
 class RefiningStrategy
 	attr_accessor :ranges
-	def initialize(miragesRange, tienkangsRange, tishasRange)
-		@ranges = { :mirages => miragesRange, :tienkangs => tienkangsRange, :tishas => tishasRange}
+	def initialize(tienkangsRange, tishasRange)
+		@ranges = { :tienkangs => tienkangsRange, :tishas => tishasRange }
 	end
 
 	def getAidForLvl(lvl)
@@ -96,10 +91,11 @@ class RefiningStrategy
 				return aid
 			end
 		end
+		:mirages
 	end
 
 	def to_s
-		"mirages: #{@ranges[:mirages].to_s}, tienkangs: #{@ranges[:tienkangs].to_s}, tishas: #{@ranges[:tishas].to_s}"
+		"tienkangs: #{@ranges[:tienkangs].to_s}, tishas: #{@ranges[:tishas].to_s}"
 	end
 end
 
