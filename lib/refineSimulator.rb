@@ -67,13 +67,6 @@ class Simulator
 			return lvl - 1, aid
 		end
 	end
-
-	def testStuff
-		puts Simulator.refineRates[8][:tienkangs]
-		puts "+8 failed mir: " + refineFailed(8, :mirages).to_s
-		puts "+8 failed tien: " + refineFailed(8, :tienkangs).to_s
-		puts "+8 failed tishas: " + refineFailed(8, :tishas).to_s
-	end
 end
 
 class RunConfiguration
@@ -164,18 +157,3 @@ class SingleRunResult
 		"lvl: #{@lvl.to_s}, mirages: #{@mirages.to_s}, tienkangs: #{@tienkangs.to_s}, tishas: #{@tishas.to_s}"
 	end
 end
-
-# result = SingleRunResult.new(5)
-# #puts result
-# #puts result.update(6, :tienkangs)
-
-# sim = Simulator.new
-# #sim.testStuff
-
-
-# strategy = RefiningStrategy.new(0..2, 3..4, 5..11)
-# #10.times { puts sim.refine(7, strategy) }
-# results, time = sim.run(0, 3, 10, strategy)
-# puts results
-# puts "Simulation running time: #{time} seconds."
-# #sim.run(5)
