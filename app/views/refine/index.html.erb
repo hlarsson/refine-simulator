@@ -1,20 +1,29 @@
 <style type="text/css">
 body { background-color: #181818; color: #a8a8a8; }
-h1 { color: #ee2020;}
-h2 { color: #ee2020;}
+h1 { color: #ee2020; }
+h2 { color: #ee2020; }
 * { font-family: Verdana; font-size: 96%; }
 label { width: 10em; float: left; }
 label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
 p { clear: both; }
 .submit { margin-left: 12em; }
 em { font-weight: bold; padding-right: 1em; vertical-align: top; }
+#main { float: left; width: 19%; }
+#help { float: right; width: 30%; }
+#result { float: left; width: 50%; }
+#config { float: left; padding: 10px; }
+#average { float: left; padding: 10px; }
+#best { float: left; padding: 10px; }
+#worst { float: left; padding: 10px; }
 </style>
 
 <script>
   var nrOfRunsAllowed = <%= @maxNrOfRuns %>;
+
   function validateMaxRunsForTarget() {
     return nrOfRunsAllowed[$('#targetLevel').val()] >= parseInt($('#nrOfRuns').val());
   }
+
   $(function() {
     $('#refineForm').bind('ajax:before', function(event, xhr, status){
       $('#result').html('<img src="/assets/ajax-loader.gif" alt="Loader image">');
@@ -23,10 +32,10 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
       $('#result').html(xhr.responseText);
     });
     $('#refineForm').bind('ajax:complete', function(event, xhr, status){
-      $('#result').html(xhr.responseText);
+        $('#result').html(xhr.responseText);
     });
     $('#refineForm').bind('ajax:failure', function(event, xhr, status){
-      $('#errorDiv').show();
+      $('#errorDiv').html(event.to_s);
     });
 
     jQuery.validator.addMethod("maxRuns", function(value, element, params) { 
@@ -48,22 +57,13 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
   });
 </script>
 
+<div id="main">
 <h1>Refining Simulator</h1>
-
 <%= form_tag '/refine/run', :id => 'refineForm', :remote => true do %>
   <p>
     <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
     <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
   </p>
-
-  <ul>
-    <li>target lvl 0-7 => max nr of runs is 1000.</li>
-    <li>target lvl 8 => max nr of runs is 100.</li>
-    <li>target lvl 9 => max nr of runs is 10.</li>
-    <li>target lvl 10 => max nr of runs is 10.</li>
-    <li>target lvl 11 => max nr of runs is 1.</li>
-    <li>target lvl 12 => max nr of runs is 1.</li>
-  </ul>
 
   <p>
     <%= label_tag(:startLevel, 'Start level') %><br>
@@ -76,13 +76,13 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
   </p>
  
   <p>
-    <%= label_tag(:tienkangsLow, 'Tienkangs on levels') %><br>
+    <%= label_tag(:tienkangsLow, 'Use tienkangs on') %><br>
     <%= text_field_tag(:tienkangsLow, 3, :size => 2) %>
     <%= text_field_tag(:tienkangsHigh, 4, :size => 2) %>
   </p>
 
   <p>
-    <%= label_tag(:tishas, 'Tishas on levels') %><br>
+    <%= label_tag(:tishas, 'Use tishas on') %><br>
     <%= text_field_tag(:tishasLow, 5, :size => 2) %>
     <%= text_field_tag(:tishasHigh, 11, :size => 2) %>
   </p>
@@ -90,7 +90,56 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
   <p>
     <%= submit_tag "Run Simulation" %>
   </p>
-
+  
 <% end %>
+</div>
 
 <div id="result"></div>
+
+<div id="help">
+  <h2>Help</h2>
+  <p>
+    The refining simulator is a tool to get an idea of the cost to refine a gear from a certain level to the wanted level. It works by running a simulation of the refining process a number of times. The odds are the ones from the game so given a large enough number of runs the results are representative of what can be expected in the game.
+  </p>
+  <ul>
+    <li><em>Number of runs</em> is the total number of times that the simulator will get the piece of gear from the start level to the target level. To avoid too much stress on the server the following limits are imposed on the number of runs.
+      <ul>
+        <li>target lvl 0-7 => max nr of runs is 2000.</li>
+        <li>target lvl 8 => max nr of runs is 1000.</li>
+        <li>target lvl 9 => max nr of runs is 100.</li>
+        <li>target lvl 10 => max nr of runs is 10.</li>
+        <li>target lvl 11 => max nr of runs is 1.</li>
+        <li>target lvl 12 => max nr of runs is 1.</li>
+      </ul>
+    </li>
+    <li>
+      The <em>start level</em> is the current level of the piece of gear. Can be between 0 and 12.
+    </li>
+    <li>
+      The <em>target level</em> is the wanted level after refining. Can be between 0 and 12.
+    </li>
+    <li>
+      <em>Use tienkangs on</em> is the levels where the simulator should use tienkangs as refining aids. Note that this is the level the gear is at. *Not* the level to refine to. Eg if you want to refine a piece from from 0 to 5 using tienkangs to go from 3-&gt;4 and 4-&gt;5, then you should enter 3 and 4 in these fields.
+    </li>
+    <li>
+      <em>Use tishas on</em> is the levels where the simulator should use tishas as refining aids. The note about tienkangs applies for tishas too.
+    </li>
+  </ul>
+  <p>
+    The results will be presented in 4 sections.
+  </p>
+  <ul>
+    <li>
+      <em>Parameters</em> is simply the numbers that were entered in the form to start the simulation.
+    </li>
+    <li>
+      <em>Average run</em> is the average of all runs, displaying the average number of mirages, tienkangs and tishas used.
+    </li>
+    <li>
+      <em>Best run</em> is the cheapest of all runs.
+    </li>
+    <li>
+      <em>Worst run</em> is the most expensive of all runs.
+    </li>
+  </ul>
+</div>

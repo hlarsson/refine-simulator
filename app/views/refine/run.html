@@ -16,75 +16,72 @@
   </p>
  
   <p>
-    <%= label_tag(:tienkangs, 'Tienkangs on levels') %><br>
+    <%= label_tag(:tienkangs, 'Use tienkangs on') %><br>
     <%= @config.strategy.ranges[:tienkangs].to_s %>
   </p>
 
   <p>
-    <%= label_tag(:tishas, 'Tishas on levels') %><br>
+    <%= label_tag(:tishas, 'Use tsishas on') %><br>
     <%= @config.strategy.ranges[:tishas].to_s %>
+  </p>
+
+  <p>
+    <%= label_tag(:runningTime, 'Running time') %><br>
+    <%= "#{@time}s" %>
   </p>
 </div>
 
-<div id="result">
-	<div id="average">
-		<% avg = @results.avg %>
-		<h2>Average run</h2>
-	    <p>
-	    	<%= label_tag(:mirages, 'Mirages used') %><br>
-    		<%= avg.mirages %>
-    	</p>
+<div id="average">
+	<% avg = @results.avg %>
+	<h2>Average run</h2>
+    <p>
+    	<%= label_tag(:mirages, 'Mirages used') %><br>
+  		<%= avg.mirages %>
+  	</p>
 
-	    <p>
-	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
-    		<%= avg.tienkangs %>
-    	</p>
+    <p>
+    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+  		<%= avg.tienkangs %>
+  	</p>
 
-	    <p>
-	    	<%= label_tag(:tishas, 'Tishas used') %><br>
-    		<%= avg.tishas %>
-    	</p>
-	</div>
-
-	<div id="average">
-		<h2>Best run</h2>
-	    <p>
-	    	<%= label_tag(:mirages, 'Mirages used') %><br>
-    		<%= @results.best.mirages %>
-    	</p>
-
-	    <p>
-	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
-    		<%= @results.best.tienkangs %>
-    	</p>
-
-	    <p>
-	    	<%= label_tag(:tishas, 'Tishas used') %><br>
-    		<%= @results.best.tishas %>
-    	</p>
-	</div>
-
-	<div id="average">
-		<h2>Worst run</h2>
-	    <p>
-	    	<%= label_tag(:mirages, 'Mirages used') %><br>
-    		<%= @results.worst.mirages %>
-    	</p>
-
-	    <p>
-	    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
-    		<%= @results.worst.tienkangs %>
-    	</p>
-
-	    <p>
-	    	<%= label_tag(:tishas, 'Tishas used') %><br>
-    		<%= @results.worst.tishas %>
-    	</p>
-	</div>
+    <p>
+    	<%= label_tag(:tishas, 'Tishas used') %><br>
+  		<%= avg.tishas %>
+  	</p>
 </div>
 
-<div id="runningTime">
-	<%= label_tag(:runningTime, 'Running time') %>
-	<%= "#{@time} seconds" %>
+<div id="best">
+	<h2>Best run</h2>
+    <p>
+    	<%= label_tag(:mirages, 'Mirages used') %><br>
+  		<%= @results.best.mirages %>
+  	</p>
+
+    <p>
+    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+  		<%= @results.best.tienkangs %>
+  	</p>
+
+    <p>
+    	<%= label_tag(:tishas, 'Tishas used') %><br>
+  		<%= @results.best.tishas %>
+  	</p>
 </div>
 
+<div id="worst">
+	<h2>Worst run</h2>
+    <p>
+    	<%= label_tag(:mirages, 'Mirages used') %><br>
+  		<%= @results.worst.mirages %>
+  	</p>
+
+    <p>
+    	<%= label_tag(:tienkangs, 'Tienkangs used') %><br>
+  		<%= @results.worst.tienkangs %>
+  	</p>
+
+    <p>
+    	<%= label_tag(:tishas, 'Tishas used') %><br>
+  		<%= @results.worst.tishas %>
+  	</p>
+</div>
