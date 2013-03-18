@@ -1,20 +1,103 @@
 <style type="text/css">
-body { background-color: #181818; color: #a8a8a8; }
-h1 { color: #ee2020; }
-h2 { color: #ee2020; }
-* { font-family: Verdana; font-size: 96%; }
-label { width: 10em; float: left; }
-label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
-p { clear: both; }
-.submit { margin-left: 12em; }
-em { font-weight: bold; padding-right: 1em; vertical-align: top; }
-#main { float: left; width: 19%; }
-#help { float: right; width: 30%; }
-#result { float: left; width: 50%; }
-#config { float: left; padding: 10px; }
-#average { float: left; padding: 10px; }
-#best { float: left; padding: 10px; }
-#worst { float: left; padding: 10px; }
+body { 
+  background-color: #181818;
+   color: #a8a8a8; 
+ }
+h1 { 
+  color: #ee2020;
+  margin-bottom: 20px; 
+}
+h2 { 
+  color: #ee2020; 
+  text-align: center; 
+}
+a { 
+  color: #ee2020; 
+}
+* { 
+  font-family: Verdana; 
+  font-size: 96%; 
+}
+label {
+ width: 10em;
+ float: left; 
+}
+label.error { 
+  float: none;
+  color: red;
+  padding-left: .5em;
+  vertical-align: top;
+}
+p { 
+  clear: both; 
+}
+.submit { 
+  margin-left: 12em; 
+}
+em { 
+  font-weight: bold;
+  padding-right: 1em;
+  vertical-align: top;
+}
+#main {
+  text-align: center;
+  background-color: #282828;
+  float: left;
+  width: 250px;
+  padding-bottom: 30px;
+  border-right: 1px solid #a8a8a8;
+  border-bottom: 1px solid #a8a8a8;
+  border-left: 1px solid #080808;
+  border-top: 1px solid #080808;
+}
+#help {
+  float: right;
+  width: 500px;
+  background-color: #282828;
+  padding-left: 20px;
+  padding-bottom: 30px;
+  padding-right: 20px;
+  border-left: 1px solid #a8a8a8;
+  border-bottom: 1px solid #a8a8a8;
+  border-right: 1px solid #080808;
+  border-top: 1px solid #080808;
+}
+#result {
+  float: left;
+  padding-left: 30px;
+}
+#config {
+  float: left;
+  padding: 10px;
+}
+#average {
+  float: left;
+  padding: 10px;
+}
+#best {
+  float: left;
+  padding: 10px;
+}
+#worst {
+  float: left;
+  padding: 10px;
+}
+.container {
+  clear: both;
+  display: block;
+  border-bottom: 1px solid #484848;
+}
+.float {
+  float: left;
+  margin-left: auto;
+  margin-right:auto;
+}
+.footer {
+  text-align: center;
+  font-size: smaller;
+  font-style: italic;
+  padding-top: 20px;
+}
 </style>
 
 <script>
@@ -54,38 +137,116 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
         tishasHigh : {required: true, number: true, min: 0, max: 11},
       }
     });
+
+    $('#useTienkangs').click(function() {
+      if ($(this).is(':checked')) {
+        $('#tienkangsLow').removeAttr('disabled');
+        $('#tienkangsHigh').removeAttr('disabled');
+      } else {
+        $('#tienkangsLow').attr('disabled', 'disabled');
+        $('#tienkangsHigh').attr('disabled', 'disabled');        
+      }
+    })
+
+    $('#useTishas').click(function() {
+      if ($(this).is(':checked')) {
+        $('#tishasLow').removeAttr('disabled');
+        $('#tishasHigh').removeAttr('disabled');
+      } else {
+        $('#tishasLow').attr('disabled', 'disabled');
+        $('#tishasHigh').attr('disabled', 'disabled');        
+      }
+    })
+
+    $('#weapon').click(function() {
+      if ($(this).is(':checked')) {
+        $('#g16').attr('checked', false);
+      }
+    })
+
+    $('#g16').click(function() {
+      if ($(this).is(':checked')) {
+        $('#weapon').attr('checked', false);
+      }
+    })
   });
 </script>
 
 <div id="main">
 <h1>Refining Simulator</h1>
 <%= form_tag '/refine/run', :id => 'refineForm', :remote => true do %>
-  <p>
-    <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
-    <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
-  </p>
+  <div class="container">
+    <p>
+      <%= label_tag(:nrOfRuns, 'Nr of runs') %>
+      <%= text_field_tag(:nrOfRuns, 100, :size => 6) %>
+    </p>
+  </div>
 
-  <p>
-    <%= label_tag(:startLevel, 'Start level') %><br>
-    <%= text_field_tag(:startLevel, 0, :size => 2) %>
-  </p>
+  <div class="container">
+    <div class="float">
+      <p>
+        <%= label_tag(:startLevel, 'Start level') %><br>
+        <%= text_field_tag(:startLevel, 0, :size => 2) %>
+      </p>
+    </div>
 
-  <p>
-    <%= label_tag(:targetLevel, 'Target level') %><br>
-    <%= text_field_tag(:targetLevel, 5, :size => 2) %>
-  </p>
+    <div class="float">
+      <p>
+        <%= label_tag(:targetLevel, 'Target level') %><br>
+        <%= text_field_tag(:targetLevel, 5, :size => 2) %>
+      </p>
+    </div>
+  </div>
  
-  <p>
-    <%= label_tag(:tienkangsLow, 'Use tienkangs on') %><br>
-    <%= text_field_tag(:tienkangsLow, 3, :size => 2) %>
-    <%= text_field_tag(:tienkangsHigh, 4, :size => 2) %>
-  </p>
+  <div class="container">
+    <div class="float">
+      <p>
+        <%= label_tag(:useTienkangs, 'Use tienkangs') %><br>
+        <%= check_box_tag(:useTienkangs, value='yes', true) %>
+      </p>
+    </div>
 
-  <p>
-    <%= label_tag(:tishas, 'Use tishas on') %><br>
-    <%= text_field_tag(:tishasLow, 5, :size => 2) %>
-    <%= text_field_tag(:tishasHigh, 11, :size => 2) %>
-  </p>
+    <div class="float">
+      <p>
+        <%= label_tag(:tienkangsLow, 'from/to level') %><br>
+        <%= text_field_tag(:tienkangsLow, 3, :size => 2) %> to 
+        <%= text_field_tag(:tienkangsHigh, 4, :size => 2) %>
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="float">
+      <p>
+        <%= label_tag(:useTishas, 'Use tishas') %><br>
+        <%= check_box_tag(:useTishas, value='yes', true) %>
+      </p>
+    </div>
+
+    <div class="float">
+      <p>
+        <%= label_tag(:tishas, 'from/to level') %><br>
+        <%= text_field_tag(:tishasLow, 5, :size => 2) %> to 
+        <%= text_field_tag(:tishasHigh, 11, :size => 2) %>
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="float">
+      <p>
+        <%= label_tag(:weapon, 'Weapon') %><br>
+        <%= check_box_tag(:weapon) %>
+      </p>
+    </div>
+
+    <div class="float">
+      <p>
+        <%= label_tag(:g16, 'G16 weapon') %><br>
+        <%= check_box_tag(:g16) %>
+      </p>
+    </div>
+  </div>
 
   <p>
     <%= submit_tag "Run Simulation" %>
@@ -119,10 +280,16 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
       The <em>target level</em> is the wanted level after refining. Can be between 0 and 12.
     </li>
     <li>
-      <em>Use tienkangs on</em> is the levels where the simulator should use tienkangs as refining aids. Note that this is the level the gear is at. *Not* the level to refine to. Eg if you want to refine a piece from from 0 to 5 using tienkangs to go from 3-&gt;4 and 4-&gt;5, then you should enter 3 and 4 in these fields.
+      Check <em>use tienkangs</em> if tienkangs should be used as refining aid at some point. <em>From/to level</em> decides which levels the simulator will use tienkangs as refining aids if the checkbox is checked. Note that this is the level the gear is at. *Not* the level to refine to. Eg if you want to refine a piece from from 0 to 5 using tienkangs to go from 3-&gt;4 and 4-&gt;5, then you should enter 3 and 4 in these fields.
     </li>
     <li>
-      <em>Use tishas on</em> is the levels where the simulator should use tishas as refining aids. The note about tienkangs applies for tishas too.
+      Check <em>use tishas</em> if tishas should be used as refining aid at some point. <em>From/to level</em> decides which levels the simulator will use tishas as refining aids if the checkbox is checked. The note about levels for tienkangs applies to tishas too.
+    </li>
+    <li>
+      Check <em>weapon</em> if the piece to refine is a weapon. Then 2 mirages will be used for each try.
+    </li>
+    <li>
+      Check <em>g16 weapon</em> if the piece to refine is a g16 weapon that requires 5 mirages per try.
     </li>
   </ul>
   <p>
@@ -142,4 +309,7 @@ em { font-weight: bold; padding-right: 1em; vertical-align: top; }
       <em>Worst run</em> is the most expensive of all runs.
     </li>
   </ul>
+  <p class="footer">
+    The source code for the simulator is available at <%= link_to 'GitHub', 'https://github.com/hlarsson/refine-simulator' %>.
+  </p>
 </div>

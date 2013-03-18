@@ -1,4 +1,4 @@
-<div id="config">
+<div class="float">
   <h2>Parameters</h2>
   <p>
     <%= label_tag(:nrOfRuns, 'Nr of runs') %><br>
@@ -17,12 +17,24 @@
  
   <p>
     <%= label_tag(:tienkangs, 'Use tienkangs on') %><br>
-    <%= @config.strategy.ranges[:tienkangs].to_s %>
+    <%= 
+      if (@config.strategy.useTienkangs)
+        @config.strategy.ranges[:tienkangs].to_s
+      else
+        "-none-"
+      end 
+    %>
   </p>
 
   <p>
     <%= label_tag(:tishas, 'Use tsishas on') %><br>
-    <%= @config.strategy.ranges[:tishas].to_s %>
+    <%= 
+      if (@config.strategy.useTishas)
+        @config.strategy.ranges[:tishas].to_s
+      else
+        "-none-"
+      end
+    %>
   </p>
 
   <p>
@@ -31,7 +43,7 @@
   </p>
 </div>
 
-<div id="average">
+<div class="float">
 	<% avg = @results.avg %>
 	<h2>Average run</h2>
     <p>
@@ -50,7 +62,7 @@
   	</p>
 </div>
 
-<div id="best">
+<div class="float">
 	<h2>Best run</h2>
     <p>
     	<%= label_tag(:mirages, 'Mirages used') %><br>
@@ -68,7 +80,7 @@
   	</p>
 </div>
 
-<div id="worst">
+<div class="float">
 	<h2>Worst run</h2>
     <p>
     	<%= label_tag(:mirages, 'Mirages used') %><br>

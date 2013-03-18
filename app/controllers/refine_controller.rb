@@ -36,26 +36,41 @@ class RefineController < ApplicationController
 
   def run
     errorMessages = []
-    validateNumberInRange(params[:tienkangsLow], 0, 11, "Tienkangs have to be between 0 and 11.", errorMessages)
-    validateNumberInRange(params[:tienkangsHigh], 0, 11, "Tienkangs have to be between 0 and 11.", errorMessages)
-    validateNumberInRange(params[:tishasLow], 0, 11, "Tishas have to be between 0 and 11.", errorMessages)
-    validateNumberInRange(params[:tishasHigh], 0, 11, "Tishas have to be between 0 and 11.", errorMessages)
-    validateNumberInRange(params[:startLevel], 0, 12, "Start level has to be between 0 and 11.", errorMessages)
-    validateNumberInRange(params[:targetLevel], 0, 12, "Target level has to be between 0 and 11.", errorMessages)
+    if (params[:useTienkangs])
+      validateNumberInRange(params[:tienkangsLow], 0, 11, "Tienkangs have to be between 0 and 11.", errorMessages)
+      validateNumberInRange(params[:tienkangsHigh], 0, 11, "Tienkangs have to be between 0 and 11.", errorMessages)
+    end
+    if (params[:useTishas])
+      validateNumberInRange(params[:tishasLow], 0, 11, "Tishas have to be between 0 and 11.", errorMessages)
+      validateNumberInRange(params[:tishasHigh], 0, 11, "Tishas have to be between 0 and 11.", errorMessages)
+    end
+    validateNumberInRange(params[:startLevel], 0, 12, "Start level has to be between 0 and 12.", errorMessages)
+    validateNumberInRange(params[:targetLevel], 0, 12, "Target level has to be between 0 and 12.", errorMessages)
     validateNumberInRange(params[:nrOfRuns], 0, 100000, "Number of runs has to be between a positive integer.", errorMessages)
     validateNrOfRuns(params[:nrOfRuns], params[:targetLevel], "Number of runs can't exceed the max number of runs listed in the table.", errorMessages)
 
     if (errorMessages.length > 0)
       render :text => ValidationError.new(errorMessages).to_s
+      return
     end
 
   	sim = Simulator.new
 
   	strategy = RefiningStrategy.new(
+      params[:useTienkangs],
+      params[:useTishas],
   		params[:tienkangsLow].to_i..params[:tienkangsHigh].to_i,
   		params[:tishasLow].to_i..params[:tishasHigh].to_i)
+
+    typeOfGear = :armor
+    if (params[:weapon])
+      typeOfGear = :weapon
+    elsif (params[:g16])
+      typeOfGear = :g16
+    end
+
   	@config = RunConfiguration.new(
-  		params[:startLevel].to_i, params[:targetLevel].to_i, params[:nrOfRuns].to_i, strategy)
+  		params[:startLevel].to_i, params[:targetLevel].to_i, params[:nrOfRuns].to_i, strategy, typeOfGear)
   	@results, @time = sim.run(@config)
   end
 

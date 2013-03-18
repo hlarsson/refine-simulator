@@ -24,14 +24,16 @@ class Simulator
 		startTime = Time.now
 		results = SimulationResults.new
 		config.nrOfRuns.times { 
-			results = results.update(runOnce(
-				config.startLvl, config.targetLvl, config.strategy, SingleRunResult.new(config.startLvl))) }
+			results = results.update(
+				runOnce(
+					config.startLvl, config.targetLvl, config.strategy, 
+					config.cost, SingleRunResult.new(config.startLvl, config.cost))) }
 		endTime = Time.now
 		return results, (endTime - startTime)
 	end
 
-	def runOnce(startLvl, targetLvl, strategy, result)
-		result = SingleRunResult.new(startLvl)
+	def runOnce(startLvl, targetLvl, strategy, cost, result)
+		result = SingleRunResult.new(startLvl, cost)
 		while (result.lvl != targetLvl)
 			newLvl, aid = refine(result.lvl, strategy)
 			result = result.update(newLvl, aid)
@@ -66,11 +68,23 @@ end
 
 class RunConfiguration
 	attr_accessor :startLvl, :targetLvl, :nrOfRuns, :strategy
-	def initialize(startLvl, targetLvl, nrOfRuns, strategy)
+	def initialize(startLvl, targetLvl, nrOfRuns, strategy, typeOfGear)
 		@startLvl = startLvl
 		@targetLvl = targetLvl
 		@nrOfRuns = nrOfRuns
 		@strategy = strategy
+		@typeOfGear = typeOfGear
+	end
+
+	def cost
+		case @typeOfGear
+		when :weapon
+			2
+		when :g16
+			5
+		else
+			1
+		end
 	end
 
 	def to_s
@@ -80,9 +94,14 @@ class RunConfiguration
 end
 
 class RefiningStrategy
-	attr_accessor :ranges
-	def initialize(tienkangsRange, tishasRange)
-		@ranges = { :tienkangs => tienkangsRange, :tishas => tishasRange }
+	attr_accessor :ranges, :useTienkangs, :useTishas
+	def initialize(useTienkangs, useTishas, tienkangsRange, tishasRange)
+		@ranges = { 
+			:tienkangs => (useTienkangs ? tienkangsRange : 13..13),
+			:tishas => (useTishas ? tishasRange : 13..13) 
+		}
+		@useTienkangs = useTienkangs
+		@useTishas = useTishas
 	end
 
 	def getAidForLvl(lvl)
@@ -101,7 +120,7 @@ end
 
 class SimulationResults
 	attr_accessor :worst, :best
-	def initialize(nrOfRuns=0, worst=SingleRunResult.new(0, 0, 0, 0), best=SingleRunResult.new(0, 100000000, 100000000, 100000000), total=SingleRunResult.new(0, 0, 0, 0))
+	def initialize(nrOfRuns=0, worst=SingleRunResult.new(0, 1, 0, 0, 0), best=SingleRunResult.new(0, 1, 100000000, 100000000, 100000000), total=SingleRunResult.new(0, 0, 0, 0))
 		@nrOfRuns = nrOfRuns
 		@worst = worst
 		@best = best
@@ -117,7 +136,7 @@ class SimulationResults
 	end
 
 	def avg
-		SingleRunResult.new(@best.lvl, @total.mirages.to_f / @nrOfRuns, @total.tienkangs.to_f / @nrOfRuns, @total.tishas.to_f / @nrOfRuns)
+		SingleRunResult.new(@best.lvl, @cost, @total.mirages.to_f / @nrOfRuns, @total.tienkangs.to_f / @nrOfRuns, @total.tishas.to_f / @nrOfRuns)
 	end
 
 	def to_s
@@ -127,18 +146,20 @@ end
 
 class SingleRunResult
 	attr_accessor :lvl, :mirages, :tienkangs, :tishas
-	def initialize(startLvl, mirages = 0, tienkangs = 0, tishas = 0)
+	def initialize(startLvl, cost, mirages = 0, tienkangs = 0, tishas = 0)
 		@lvl = startLvl
 		@mirages = mirages
 		@tienkangs = tienkangs
 		@tishas = tishas
+		@cost = cost
+		puts "cost: " + cost.to_s
 	end
 
 	def update(newLvl, aid)
-		mirages = @mirages + 1
+		mirages = @mirages + @cost
 		tienkangs = @tienkangs + (aid == :tienkangs ? 1 : 0)
 		tishas = @tishas + (aid == :tishas ? 1 : 0)
-		SingleRunResult.new(newLvl, mirages, tienkangs, tishas)
+		SingleRunResult.new(newLvl, @cost, mirages, tienkangs, tishas)
 	end
 
 	def self.worst(run1, run2)
@@ -150,7 +171,7 @@ class SingleRunResult
 	end
 
 	def add(singleRunResult)
-		SingleRunResult.new(singleRunResult.lvl, @mirages + singleRunResult.mirages, @tienkangs + singleRunResult.tienkangs, @tishas + singleRunResult.tishas)
+		SingleRunResult.new(singleRunResult.lvl, @cost, @mirages + singleRunResult.mirages, @tienkangs + singleRunResult.tienkangs, @tishas + singleRunResult.tishas)
 	end
 
 	def to_s
