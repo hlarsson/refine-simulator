@@ -152,7 +152,6 @@ class SingleRunResult
 		@tienkangs = tienkangs
 		@tishas = tishas
 		@cost = cost
-		puts "cost: " + cost.to_s
 	end
 
 	def update(newLvl, aid)
